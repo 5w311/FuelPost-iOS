@@ -1740,7 +1740,7 @@ console.log('\n=== the terminal in Near Me, never in a plan (v2.3.9) ===');
      /const TERMINAL_FUEL_NOTE = 'Diesel only, no DEF';/.test(codeOnly)
      && /const firstNote = first\.stop\.tier === 'term' \? ` \(\$\{TERMINAL_FUEL_NOTE\}\)` : '';/.test(codeOnly));
   ok('  and the terminal\'s card has a Fuel row saying it is not used in plans',
-     /if\(type === 'term'\) html \+= `<div class="row"><div class="k">Fuel<\/div><div class="v">\$\{TERMINAL_FUEL_NOTE\} &middot; not used in plans<\/div><\/div>`;/.test(codeOnly));
+     /if\(type === 'term'\) html \+= `<div class="row"><div class="k">Fuel<\/div><div class="v">\$\{TERMINAL_FUEL_NOTE\}<br>Not used in plans<\/div><\/div>`;/.test(codeOnly));
 }
 
 console.log('\n=== the terminal\'s own amenities on its card (v2.3.9) ===');
