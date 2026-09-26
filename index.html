@@ -893,6 +893,8 @@
     border:1px solid var(--line);background:var(--bg);color:var(--sub);text-align:left;}
   .vp-haz button[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#fff;}
   #vehicleHazmat, #vehicleCustom{margin-top:2px;}
+  .vp-haz-switch{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:12.5px;font-weight:700;color:var(--ink);cursor:pointer;}
+  .vp-haz-switch input{flex-shrink:0;width:18px;height:18px;margin:0;accent-color:var(--ta);}
 
   /* Alternative-route switcher. Themed off the CSS variables (unlike the
      fixed-tint .rr-warn callouts) since it's chrome, not a callout.
@@ -1481,6 +1483,8 @@ body:not(.route-mode) #mapwrap .H_l_bottom.H_l_right .H_ctl:not(.H_zoom):not(.H_
 #shareTripBtn{height:41px;border-radius:20.5px;background:var(--fill);border:0;color:var(--navy-text);font-size:15px;font-weight:600;margin-top:12px;}
 #clearTripBtn{text-decoration:none;color:var(--danger-text);font-size:13.5px;font-weight:600;min-height:40px;}
 .vp-haz-head{font-size:15px;font-weight:600;}
+.vp-haz-switch{font-size:15px;font-weight:600;min-height:44px;margin-top:4px;}
+.vp-haz-switch input{width:20px;height:20px;accent-color:var(--accent-fill);}
 .vp-haz{gap:8px;}
 .vp-haz button{font-size:13px;font-weight:600;padding:8px 12px;border-radius:18px;background:var(--fill);border:.5px solid transparent;color:var(--ink);}
 .vp-haz button[aria-pressed="true"]{background:rgba(10,132,255,.18);border-color:rgba(77,163,255,.5);color:var(--navy-text);}
@@ -1859,6 +1863,12 @@ html[data-theme="dark"]{--navy:#3A5F9E;}
         </div>
         <div class="rb-help">Leave a box empty to use the standard value for it. 162 in is 13'6"; 840 in is 70 ft.</div>
         <div class="vp-errors" id="vehicleErrors" hidden></div>
+        <!-- Hazmat on a Custom rig (v2.3.11). An oversize or overweight load
+             can be placarded too; before this, Custom sent its dimensions and
+             never any hazmat, so that truck could only be routed wrong one way
+             or the other. Off by default — most Custom loads are just big —
+             and on, it opens the same placard list the Hazmat button uses. -->
+        <label class="vp-haz-switch"><input type="checkbox" id="vpHazmat"> Carrying hazmat?</label>
       </div>
 
       <!-- Hazard classes. NOT a single on/off: HERE does not infer between
@@ -2088,35 +2098,35 @@ html[data-theme="dark"]{--navy:#3A5F9E;}
      commit). test/cachebust.test.js fails the suite if any stamp drifts from
      APP_VERSION, so bump them together. -->
 <script>var module = { exports: {} };</script>
-<script src="lib/fuelplan.js?v=2.3.10"></script>
+<script src="lib/fuelplan.js?v=2.3.11"></script>
 <script>var FuelPlan = module.exports; module = { exports: {} };</script>
-<script src="lib/triptext.js?v=2.3.10"></script>
+<script src="lib/triptext.js?v=2.3.11"></script>
 <script>var TripText = module.exports; module = { exports: {} };</script>
-<script src="lib/location.js?v=2.3.10"></script>
+<script src="lib/location.js?v=2.3.11"></script>
 <script>var GeoLib = module.exports; module = { exports: {} };</script>
-<script src="lib/gauge.js?v=2.3.10"></script>
+<script src="lib/gauge.js?v=2.3.11"></script>
 <script>var FuelGauge = module.exports; module = { exports: {} };</script>
-<script src="lib/corridors.js?v=2.3.10"></script>
+<script src="lib/corridors.js?v=2.3.11"></script>
 <script>var Corridors = module.exports; module = { exports: {} };</script>
-<script src="lib/nearme.js?v=2.3.10"></script>
+<script src="lib/nearme.js?v=2.3.11"></script>
 <script>var NearMe = module.exports; module = { exports: {} };</script>
-<script src="lib/extract-version.js?v=2.3.10"></script>
+<script src="lib/extract-version.js?v=2.3.11"></script>
 <script>var ExtractVersion = module.exports; module = { exports: {} };</script>
-<script src="lib/autosuggest.js?v=2.3.10"></script>
+<script src="lib/autosuggest.js?v=2.3.11"></script>
 <script>var AutoSuggest = module.exports; module = { exports: {} };</script>
-<script src="lib/baselayer.js?v=2.3.10"></script>
+<script src="lib/baselayer.js?v=2.3.11"></script>
 <script>var BaseLayer = module.exports; module = { exports: {} };</script>
-<script src="lib/memocache.js?v=2.3.10"></script>
+<script src="lib/memocache.js?v=2.3.11"></script>
 <script>var MemoCache = module.exports; module = { exports: {} };</script>
-<script src="lib/routerank.js?v=2.3.10"></script>
+<script src="lib/routerank.js?v=2.3.11"></script>
 <script>var RouteRank = module.exports; module = { exports: {} };</script>
-<script src="lib/vehicleprofile.js?v=2.3.10"></script>
+<script src="lib/vehicleprofile.js?v=2.3.11"></script>
 <script>var VehicleProfile = module.exports; module = { exports: {} };</script>
-<script src="lib/escape.js?v=2.3.10"></script>
+<script src="lib/escape.js?v=2.3.11"></script>
 <script>var Esc = module.exports; module = { exports: {} };</script>
-<script src="lib/stopfilter.js?v=2.3.10"></script>
+<script src="lib/stopfilter.js?v=2.3.11"></script>
 <script>var StopFilter = module.exports; module = { exports: {} };</script>
-<script src="lib/navlinks.js?v=2.3.10"></script>
+<script src="lib/navlinks.js?v=2.3.11"></script>
 <script>var NavLinks = module.exports; module = { exports: {} };</script>
 
 <!-- fuelplan-adaptive.js ships unmodified and does `require('./fuelplan.js')`
@@ -2132,7 +2142,7 @@ html[data-theme="dark"]{--navy:#3A5F9E;}
      mode never loads this file. -->
 <script>
 var FuelPlanAdaptive;
-fetch('lib/fuelplan-adaptive.js?v=2.3.10')
+fetch('lib/fuelplan-adaptive.js?v=2.3.11')
   .then(r => r.text())
   .then(src => {
     const m = { exports: {} };
@@ -2149,7 +2159,7 @@ fetch('lib/fuelplan-adaptive.js?v=2.3.10')
 // same reason as the long comment above. planLoad() guards on both being
 // loaded before planning.
 var ShortTrip;
-fetch('lib/shorttrip.js?v=2.3.10')
+fetch('lib/shorttrip.js?v=2.3.11')
   .then(r => r.text())
   .then(src => {
     const m = { exports: {} };
@@ -2160,7 +2170,7 @@ fetch('lib/shorttrip.js?v=2.3.10')
   .catch(err => console.error('Failed to load lib/shorttrip.js:', err));
 </script>
 
-<script src="lib/flexible-polyline.js?v=2.3.10"></script>
+<script src="lib/flexible-polyline.js?v=2.3.11"></script>
 <script>var FlexPolyline = module.exports; module = undefined;</script>
 
 <script>
@@ -2501,7 +2511,7 @@ const STATE_NAMES = {
 // CLOSED_STOP_IDS, and keeps its pin and its sheet so a driver who goes looking
 // learns what happened to it. Deleting a closed row throws that away. See the
 // closure block further down for the live example of the second kind.
-const APP_VERSION = '2.3.10';
+const APP_VERSION = '2.3.11';
 const FUEL_BOOK_REV = 'Rev 01-2026';
 
 // Every code that appears in DATA's amenity column must have an entry here.
@@ -6493,7 +6503,7 @@ const HAZ_LABELS = {
 };
 
 let vehicle = { mode: 'standard', heightIn: '', widthIn: '', lengthIn: '', weightLb: '',
-                hazmat: VehicleProfile.HAZMAT_CLASSES.slice() };
+                hazmat: VehicleProfile.HAZMAT_CLASSES.slice(), customHazmat: false };
 
 // Never throw, never apply a half-parsed profile: anything unrecognised
 // falls all the way back to standard, which is the safe default because it
@@ -6510,7 +6520,10 @@ function loadVehicle(){
       mode: raw.mode,
       heightIn: num(raw.heightIn), widthIn: num(raw.widthIn),
       lengthIn: num(raw.lengthIn), weightLb: num(raw.weightLb),
-      hazmat: (haz && haz.length) ? haz : VehicleProfile.HAZMAT_CLASSES.slice()
+      hazmat: (haz && haz.length) ? haz : VehicleProfile.HAZMAT_CLASSES.slice(),
+      // Strictly true: anything else, including a profile saved before
+      // v2.3.11, is a Custom rig with no placards — as it was then.
+      customHazmat: raw.customHazmat === true
     };
   } catch(_){ /* malformed or unavailable storage — keep the standard default */ }
 }
@@ -6521,7 +6534,9 @@ function saveVehicle(){
 
 // The profile object handed to VehicleProfile.vehicleParams(). Hazmat and
 // dimensions are independent — a Custom rig can be carrying placards too, so
-// hazmat rides along whenever the driver declared it on either profile.
+// hazmat rides along on Hazmat, and on Custom when its switch is on (v2.3.11;
+// before that this comment said so and the code did not). One placard list
+// serves both.
 function activeVehicleProfile(){
   const p = {};
   if(vehicle.mode === 'custom'){
@@ -6531,24 +6546,31 @@ function activeVehicleProfile(){
     if(n(vehicle.lengthIn) !== undefined) p.lengthIn = n(vehicle.lengthIn);
     if(n(vehicle.weightLb) !== undefined) p.weightLb = n(vehicle.weightLb);
   }
-  if(vehicle.mode === 'hazmat') p.hazmat = vehicle.hazmat.slice();
+  if(vehicleHazmatOn()) p.hazmat = vehicle.hazmat.slice();
   return p;
+}
+
+// Is hazmat declared at all right now? The one answer the routing call, the
+// summary and the placard list all read.
+function vehicleHazmatOn(){
+  return vehicle.mode === 'hazmat' || (vehicle.mode === 'custom' && vehicle.customHazmat);
+}
+function hazmatSummary(){
+  return vehicle.hazmat.length === VehicleProfile.HAZMAT_CLASSES.length
+    ? 'Hazmat — all classes declared'
+    : 'Hazmat — ' + vehicle.hazmat.map(h => HAZ_LABELS[h] || h).join(', ');
 }
 
 // Short human label for the plan panel and the shared text. Standard returns
 // '' — nothing to say when nothing was changed.
 function vehicleSummary(){
   if(vehicle.mode === 'standard') return '';
-  if(vehicle.mode === 'hazmat'){
-    const n = vehicle.hazmat.length;
-    return n === VehicleProfile.HAZMAT_CLASSES.length
-      ? 'Hazmat — all classes declared'
-      : 'Hazmat — ' + vehicle.hazmat.map(h => HAZ_LABELS[h] || h).join(', ');
-  }
+  if(vehicle.mode === 'hazmat') return hazmatSummary();
   const S = VehicleProfile.STANDARD;
   const f = (v, std, unit) => `${v === '' ? std : v}${unit}${v === '' ? '' : ''}`;
   return `Custom — ${f(vehicle.heightIn, S.heightIn, 'in')} h · ${f(vehicle.widthIn, S.widthIn, 'in')} w · `
-       + `${f(vehicle.lengthIn, S.lengthIn, 'in')} l · ${f(vehicle.weightLb, S.weightLb, 'lb')}`;
+       + `${f(vehicle.lengthIn, S.lengthIn, 'in')} l · ${f(vehicle.weightLb, S.weightLb, 'lb')}`
+       + (vehicle.customHazmat ? ' · ' + hazmatSummary() : '');
 }
 
 function vehicleErrors(){
@@ -6583,7 +6605,8 @@ const VEHICLE_HELP = {
     truck. Running permitted, heavy-haul or oversize? Use Custom.`,
   hazmat: `Same standard dimensions, plus the placards you declare below — routes then avoid roads
     barred to those classes.`,
-  custom: `Your rig's own numbers. Each one you fill in replaces the standard value for it.`
+  custom: `Your rig's own numbers. Each one you fill in replaces the standard value for it.
+    Hauling placards too? Switch on hazmat below the numbers.`
 };
 
 function renderVehicle(){
@@ -6591,7 +6614,8 @@ function renderVehicle(){
     b.classList.toggle('active', b.dataset.vp === vehicle.mode));
   $('vehicleHelp').innerHTML = VEHICLE_HELP[vehicle.mode] || VEHICLE_HELP.standard;
   $('vehicleCustom').hidden = vehicle.mode !== 'custom';
-  $('vehicleHazmat').hidden = vehicle.mode !== 'hazmat';
+  $('vehicleHazmat').hidden = !vehicleHazmatOn();
+  $('vpHazmat').checked = vehicle.customHazmat;
   $('vpHeight').value = vehicle.heightIn;
   $('vpWidth').value  = vehicle.widthIn;
   $('vpLength').value = vehicle.lengthIn;
@@ -6630,6 +6654,11 @@ document.querySelectorAll('#vehicleSeg button').forEach(b =>
       $(id).focus();
     });
   });
+
+$('vpHazmat').addEventListener('change', () => {
+  vehicle.customHazmat = $('vpHazmat').checked;
+  saveVehicle(); renderVehicle();
+});
 
 loadVehicle();
 renderVehicle();
