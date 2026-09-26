@@ -663,6 +663,11 @@ Three releases shipped as v1.65.0, v1.66.0 and v2.0.0 on the same day and are
 one entry here. The commits keep their own titles, so git log names two versions
 this list does not.
 
+### v2.3.13
+On the Route tab, only one card is open at a time: opening Trip details shrinks
+the fuel plan card down to its bar, and opening the fuel plan shrinks Trip
+details.
+
 ### v2.3.12
 The tank gauge reads cleaner: the answer ("F — 900 mi") sits beside "How far can
 you run now?", the needle is blue, and the red low-tank warning with the Fuel

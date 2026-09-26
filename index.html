@@ -2117,35 +2117,35 @@ html[data-theme="dark"]{--navy:#3A5F9E;}
      commit). test/cachebust.test.js fails the suite if any stamp drifts from
      APP_VERSION, so bump them together. -->
 <script>var module = { exports: {} };</script>
-<script src="lib/fuelplan.js?v=2.3.12"></script>
+<script src="lib/fuelplan.js?v=2.3.13"></script>
 <script>var FuelPlan = module.exports; module = { exports: {} };</script>
-<script src="lib/triptext.js?v=2.3.12"></script>
+<script src="lib/triptext.js?v=2.3.13"></script>
 <script>var TripText = module.exports; module = { exports: {} };</script>
-<script src="lib/location.js?v=2.3.12"></script>
+<script src="lib/location.js?v=2.3.13"></script>
 <script>var GeoLib = module.exports; module = { exports: {} };</script>
-<script src="lib/gauge.js?v=2.3.12"></script>
+<script src="lib/gauge.js?v=2.3.13"></script>
 <script>var FuelGauge = module.exports; module = { exports: {} };</script>
-<script src="lib/corridors.js?v=2.3.12"></script>
+<script src="lib/corridors.js?v=2.3.13"></script>
 <script>var Corridors = module.exports; module = { exports: {} };</script>
-<script src="lib/nearme.js?v=2.3.12"></script>
+<script src="lib/nearme.js?v=2.3.13"></script>
 <script>var NearMe = module.exports; module = { exports: {} };</script>
-<script src="lib/extract-version.js?v=2.3.12"></script>
+<script src="lib/extract-version.js?v=2.3.13"></script>
 <script>var ExtractVersion = module.exports; module = { exports: {} };</script>
-<script src="lib/autosuggest.js?v=2.3.12"></script>
+<script src="lib/autosuggest.js?v=2.3.13"></script>
 <script>var AutoSuggest = module.exports; module = { exports: {} };</script>
-<script src="lib/baselayer.js?v=2.3.12"></script>
+<script src="lib/baselayer.js?v=2.3.13"></script>
 <script>var BaseLayer = module.exports; module = { exports: {} };</script>
-<script src="lib/memocache.js?v=2.3.12"></script>
+<script src="lib/memocache.js?v=2.3.13"></script>
 <script>var MemoCache = module.exports; module = { exports: {} };</script>
-<script src="lib/routerank.js?v=2.3.12"></script>
+<script src="lib/routerank.js?v=2.3.13"></script>
 <script>var RouteRank = module.exports; module = { exports: {} };</script>
-<script src="lib/vehicleprofile.js?v=2.3.12"></script>
+<script src="lib/vehicleprofile.js?v=2.3.13"></script>
 <script>var VehicleProfile = module.exports; module = { exports: {} };</script>
-<script src="lib/escape.js?v=2.3.12"></script>
+<script src="lib/escape.js?v=2.3.13"></script>
 <script>var Esc = module.exports; module = { exports: {} };</script>
-<script src="lib/stopfilter.js?v=2.3.12"></script>
+<script src="lib/stopfilter.js?v=2.3.13"></script>
 <script>var StopFilter = module.exports; module = { exports: {} };</script>
-<script src="lib/navlinks.js?v=2.3.12"></script>
+<script src="lib/navlinks.js?v=2.3.13"></script>
 <script>var NavLinks = module.exports; module = { exports: {} };</script>
 
 <!-- fuelplan-adaptive.js ships unmodified and does `require('./fuelplan.js')`
@@ -2161,7 +2161,7 @@ html[data-theme="dark"]{--navy:#3A5F9E;}
      mode never loads this file. -->
 <script>
 var FuelPlanAdaptive;
-fetch('lib/fuelplan-adaptive.js?v=2.3.12')
+fetch('lib/fuelplan-adaptive.js?v=2.3.13')
   .then(r => r.text())
   .then(src => {
     const m = { exports: {} };
@@ -2178,7 +2178,7 @@ fetch('lib/fuelplan-adaptive.js?v=2.3.12')
 // same reason as the long comment above. planLoad() guards on both being
 // loaded before planning.
 var ShortTrip;
-fetch('lib/shorttrip.js?v=2.3.12')
+fetch('lib/shorttrip.js?v=2.3.13')
   .then(r => r.text())
   .then(src => {
     const m = { exports: {} };
@@ -2189,7 +2189,7 @@ fetch('lib/shorttrip.js?v=2.3.12')
   .catch(err => console.error('Failed to load lib/shorttrip.js:', err));
 </script>
 
-<script src="lib/flexible-polyline.js?v=2.3.12"></script>
+<script src="lib/flexible-polyline.js?v=2.3.13"></script>
 <script>var FlexPolyline = module.exports; module = undefined;</script>
 
 <script>
@@ -2530,7 +2530,7 @@ const STATE_NAMES = {
 // CLOSED_STOP_IDS, and keeps its pin and its sheet so a driver who goes looking
 // learns what happened to it. Deleting a closed row throws that away. See the
 // closure block further down for the live example of the second kind.
-const APP_VERSION = '2.3.12';
+const APP_VERSION = '2.3.13';
 const FUEL_BOOK_REV = 'Rev 01-2026';
 
 // Every code that appears in DATA's amenity column must have an entry here.
@@ -5278,7 +5278,15 @@ function setRrCollapsed(collapsed){
   $('rrTab').setAttribute('aria-expanded', String(!collapsed));
   syncRrTabShowing();
 }
-$('rrTab').addEventListener('click', () => setRrCollapsed(!rrCollapsed));
+// One card open at a time (v2.3.13): opening the results tucks the trip
+// details away, and the trip details' own tab does the reverse (below).
+// Only on a TAP — the two cards each still open and close on their own when
+// the app drives them.
+$('rrTab').addEventListener('click', () => {
+  const expanding = rrCollapsed;
+  setRrCollapsed(!rrCollapsed);
+  if(expanding && routebarOpen) setRoutebarOpen(false);
+});
 // Collapse/expand animates .rr-body-wrap's max-height over 250ms, so the
 // synchronous measurement in syncRrTabShowing captures a height that's
 // about to change. Re-measure when the transition settles — this is the
@@ -5325,7 +5333,15 @@ function setRoutebarOpen(open){
   // finishes — no per-site resize() call needed here.
 }
 
-$('routebarTab').addEventListener('click', () => setRoutebarOpen(!routebarOpen));
+// Opening the trip details minimises an open results card (v2.3.13) — but
+// only one that can be reopened: #rrTab is hidden for loading notes, errors
+// and the address check, and collapsing those would leave no way back.
+$('routebarTab').addEventListener('click', () => {
+  const opening = !routebarOpen;
+  setRoutebarOpen(opening);
+  const rr = $('routeResults');
+  if(opening && !rrCollapsed && rr.classList.contains('show') && !$('rrTab').hidden) setRrCollapsed(true);
+});
 
 /* ---- Mode switch ---- */
 function setMode(mode){
