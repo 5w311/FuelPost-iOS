@@ -6769,7 +6769,9 @@ function renderGauge(){
 // E (tick 0) isn't a landing spot — a tap or drag that lands there snaps to
 // the floor (tick 1, 1/8 tank) instead of wherever was actually tapped.
 function setGaugeTick(rawTick){
-  gaugeTick = Math.max(GAUGE_MIN_TICK, Math.min(GAUGE_MAX_TICK, Math.round(rawTick)));
+  // Whole eighths and the halves between them (v2.3.12) — FuelGauge.snapTick
+  // is the one rule for where a needle can rest.
+  gaugeTick = Math.max(GAUGE_MIN_TICK, FuelGauge.snapTick(rawTick));
   renderGauge();
   updateClearVisibility();
 }
@@ -6793,8 +6795,8 @@ gaugeTrackEl.addEventListener('pointerup', () => { gaugeDragging = false; });
 gaugeTrackEl.addEventListener('pointercancel', () => { gaugeDragging = false; });
 
 $('fuelGauge').addEventListener('keydown', e => {
-  if(e.key === 'ArrowRight' || e.key === 'ArrowUp'){ setGaugeTick(gaugeTick + 1); e.preventDefault(); }
-  else if(e.key === 'ArrowLeft' || e.key === 'ArrowDown'){ setGaugeTick(gaugeTick - 1); e.preventDefault(); }
+  if(e.key === 'ArrowRight' || e.key === 'ArrowUp'){ setGaugeTick(gaugeTick + FuelGauge.TICK_STEP); e.preventDefault(); }
+  else if(e.key === 'ArrowLeft' || e.key === 'ArrowDown'){ setGaugeTick(gaugeTick - FuelGauge.TICK_STEP); e.preventDefault(); }
   else if(e.key === 'Home'){ setGaugeTick(GAUGE_MIN_TICK); e.preventDefault(); }
   else if(e.key === 'End'){ setGaugeTick(GAUGE_MAX_TICK); e.preventDefault(); }
   else if(e.key === 'Enter') startPlan();

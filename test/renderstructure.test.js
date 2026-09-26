@@ -1776,6 +1776,10 @@ ok('>>> the low-tank note shows only at or under the floor',
    && /\$\('gaugeDangerNote'\)\.hidden = gaugeTick > FuelGauge\.RESERVE_TICKS;/.test(codeOnly));
 ok('  and says when the plan is on backup reserve, since the short reading does not',
    /\$\('gaugeBackup'\)\.hidden = !r\.backup;/.test(codeOnly));
+ok('>>> the needle rests on whole eighths and the halves between (FuelGauge.snapTick)',
+   /gaugeTick = Math\.max\(GAUGE_MIN_TICK, FuelGauge\.snapTick\(rawTick\)\);/.test(codeOnly)
+   && /setGaugeTick\(gaugeTick \+ FuelGauge\.TICK_STEP\)/.test(codeOnly)
+   && /setGaugeTick\(gaugeTick - FuelGauge\.TICK_STEP\)/.test(codeOnly));
 ok('>>> no tick on E or F, where they poked out of the rounded track',
    /\.gauge-ticks > \.gauge-tick:first-child,\.gauge-ticks > \.gauge-tick:last-child\{display:none;\}/.test(html));
 ok('>>> the needle is the accent blue, not red',

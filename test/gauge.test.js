@@ -21,7 +21,9 @@ ok('tick 2 (1/4) = 300 mi', G.milesForTick(2) === 300);
 ok('tick 7 (7/8) = 1050 mi', G.milesForTick(7) === 1050);
 ok('out-of-range tick clamps low', G.milesForTick(-3) === 0);
 ok('out-of-range tick clamps high', G.milesForTick(99) === 1200);
-ok('fractional tick rounds', G.milesForTick(4.6) === 750, G.milesForTick(4.6));
+// v2.3.12: ticks snap to the nearest HALF eighth, not the nearest eighth.
+ok('fractional tick snaps to the nearest half', G.milesForTick(4.6) === 675 && G.milesForTick(4.8) === 750,
+   JSON.stringify([G.milesForTick(4.6), G.milesForTick(4.8)]));
 // EVEN is the whole point of this model, so it is asserted as a property and
 // not just as a table: every step down the gauge is the same size. A tank
 // whose eighths were uneven could still satisfy every literal above.
@@ -411,6 +413,21 @@ console.log('\n=== the range tiers against the tank scale ===');
     ok('  and one mile further than the tank plans is honestly a gap',
        FuelPlan.planFuel(901, [], T.max, debit).ok === false);
   }
+}
+
+console.log('\n=== half steps between the eighths (v2.3.12) ===');
+ok('>>> a half step is 75 mi', G.milesForTick(4.5) === 675 && G.milesForTick(7.5) === 1125);
+ok('  labelled as the eighth under it plus "+"',
+   G.tickLabel(4.5) === '1/2+' && G.tickLabel(1.5) === '1/8+' && G.tickLabel(7.5) === '7/8+' && G.tickLabel(4) === '1/2');
+ok('>>> plannable and backup miles follow the half, floors stay on whole eighths',
+   G.plannableMilesForTick(2.5) === 75 && G.plannableMilesForTick(1.5) === 0
+   && G.backupMilesForTick(1.5) === 75 && G.rangeForTick(1.5).backup === true && G.rangeForTick(1.5).miles === 75);
+ok('  snapTick never leaves the dial', G.snapTick(-1) === 0 && G.snapTick(9) === 8 && G.snapTick(NaN) === 0);
+{
+  // Snapping to the nearest half is never off by more than a quarter eighth.
+  let worst = 0;
+  for (let t = 0; t <= 8; t += 0.01) worst = Math.max(worst, Math.abs(G.milesForTick(t) - t * G.MILES_PER_TICK));
+  ok('>>> the needle is never more than 37.5 mi from where it was put', worst <= 37.5 + 1e-6, String(worst));
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

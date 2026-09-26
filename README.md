@@ -57,9 +57,14 @@ instead of assuming you're full.
 
 | Needle | What it plans on |
 |---|---|
-| 3/8 and up | Normal — 150 miles at 3/8, up to 900 at F |
+| 1/4+ and up | Normal — 75 miles at 1/4+, 150 at 3/8, up to 900 at F |
 | **1/4** | **150 miles of backup**, and it warns you |
+| **1/8+** | **75 miles of backup**, and it warns you |
 | 1/8 | Nothing. It shows you the floor message instead |
+
+The needle stops on each eighth and on the small mark halfway between two
+eighths, which reads with a "+": 1/2+ is halfway from 1/2 to 5/8, 75 miles more
+than 1/2.
 
 The bottom eighth is never touched at all. The stretch between 1/8 and 1/4 is
 backup — the app will dig into it if you're already down there and need to see
@@ -662,7 +667,9 @@ this list does not.
 The tank gauge reads cleaner: the answer ("F — 900 mi") sits beside "How far can
 you run now?", the needle is blue, and the red low-tank warning with the Fuel
 Dept number only shows when the needle is at 1/4 or below. The marks at E and F
-no longer poke out of the ends of the gauge.
+no longer poke out of the ends of the gauge. The needle also stops on the small
+marks between the eighths, 75 miles apart, read as "1/2+" and so on — so a
+needle between two marks is never credited with a whole extra eighth.
 
 ### v2.3.11
 Custom in Vehicle Routing has a "Carrying hazmat?" switch. Turn it on and pick
