@@ -1751,5 +1751,19 @@ ok('  shown after DATA\'s chips, escaped, and only where a stop has some',
    && /if\(sheetAmen \|\| yardAmen\)\{/.test(codeOnly)
    && /\$\{amenChips\(sheetAmen,AMEN_LABEL\)\}\$\{yardAmen\}/.test(codeOnly));
 
+console.log('\n=== Custom can carry hazmat (v2.3.11) ===');
+ok('>>> a "Carrying hazmat?" switch sits inside the Custom block',
+   /<div id="vehicleCustom" hidden>[\s\S]*<label class="vp-haz-switch"><input type="checkbox" id="vpHazmat"> Carrying hazmat\?<\/label>\s*<\/div>\s*<!-- Hazard classes/.test(html));
+ok('  hazmat is declared on Hazmat, or on Custom with the switch on — nowhere else',
+   /function vehicleHazmatOn\(\)\{\s*return vehicle\.mode === 'hazmat' \|\| \(vehicle\.mode === 'custom' && vehicle\.customHazmat\);\s*\}/.test(codeOnly)
+   && /if\(vehicleHazmatOn\(\)\) p\.hazmat = vehicle\.hazmat\.slice\(\);/.test(codeOnly));
+ok('  the placard list shows whenever hazmat is on',
+   /\$\('vehicleHazmat'\)\.hidden = !vehicleHazmatOn\(\);/.test(codeOnly));
+ok('>>> off by default, and a saved profile turns it on only when strictly true',
+   /hazmat: VehicleProfile\.HAZMAT_CLASSES\.slice\(\), customHazmat: false \};/.test(codeOnly)
+   && /customHazmat: raw\.customHazmat === true/.test(codeOnly));
+ok('  the Custom summary names the hazmat too',
+   /\+ \(vehicle\.customHazmat \? ' · ' \+ hazmatSummary\(\) : ''\);/.test(codeOnly));
+
 console.log(`\n${p} passed, ${f} failed`);
 if (f) process.exitCode = 1;

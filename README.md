@@ -658,6 +658,10 @@ Three releases shipped as v1.65.0, v1.66.0 and v2.0.0 on the same day and are
 one entry here. The commits keep their own titles, so git log names two versions
 this list does not.
 
+### v2.3.11
+Custom in Vehicle Routing has a "Carrying hazmat?" switch. Turn it on and pick
+your placards, and the route respects both your rig's size and its hazmat.
+
 ### v2.3.10
 On the Covenant terminal's card, "Not used in plans" sits on its own line under
 "Diesel only, no DEF".

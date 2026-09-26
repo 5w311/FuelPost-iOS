@@ -97,4 +97,11 @@ ok('HAZMAT_CLASSES equals the documented enum exactly',
    JSON.stringify(V.HAZMAT_CLASSES) === JSON.stringify(LIVE_SPEC_ENUM),
    JSON.stringify(V.HAZMAT_CLASSES));
 
+// v2.3.11: a Custom rig can be placarded. The lib always took both; this
+// pins that a custom-size profile with hazmat sends both, nothing dropped.
+q = V.vehicleParams({ heightIn: 168, weightLb: 120000, hazmat: ['flammable', 'corrosive'] });
+ok('>>> custom dimensions AND hazmat sent together',
+   q['vehicle[height]'] === '427' && q['vehicle[grossWeight]'] === '54432'
+   && q['vehicle[shippedHazardousGoods]'] === 'flammable,corrosive', JSON.stringify(q));
+
 console.log(`\n${p} passed, ${f} failed`);
