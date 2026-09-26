@@ -174,6 +174,9 @@ the nearest fuel" — tap it to see the nearest four.
   an hour ago, you shouldn't be told the nearest fuel is 200 miles away.
 - Past 200 miles it stops offering a stop and just tells you how far the nearest
   one is.
+- **The Covenant terminal in Chattanooga shows up here too**, marked "Diesel
+  only, no DEF": its pump fills diesel but not DEF. It's never used in a fuel
+  plan.
 
 **Corridor filter** — pick I-40 and get I-40. Plain search can't do that: typing
 `I-5` also brings back I-55, I-57 and I-59, which quietly shows you stops on
@@ -654,6 +657,12 @@ and in the code comments. Nothing below is needed to use the app.
 Three releases shipped as v1.65.0, v1.66.0 and v2.0.0 on the same day and are
 one entry here. The commits keep their own titles, so git log names two versions
 this list does not.
+
+### v2.3.9
+The nearest-fuel bar at the bottom of the map can offer the Covenant terminal in
+Chattanooga, marked "Diesel only, no DEF", because its pump fills diesel. Its
+card says the same, and lists the terminal's laundry, driver lounge, dining
+facility, barbershop and company store. It is still never used in a fuel plan.
 
 ### v2.3.8
 A stop's card lists its restaurants: the sit-down restaurant as Full service

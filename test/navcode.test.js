@@ -264,13 +264,16 @@ console.log('\n=== the code appears in all FOUR places (v1.34.0) ===');
   // other place a driver picks a stop without opening it.
   const nmFn = code.slice(code.indexOf('function renderNearMe('));
   const nmBody = nmFn.slice(0, nmFn.indexOf('\n}\n') + 3);
-  ok('>>> 4. the Near Me rows carry it beside the exit',
-     /<span class="nm-code">&middot; \$\{Esc\.escapeHtml\(n\.stop\.row\[20\]\)\}<\/span>/.test(nmBody),
+  // v2.3.9: the terminal can be a Near Me row and has no code, so the slot
+  // carries its fuel note there instead.
+  ok('>>> 4. the Near Me rows carry it beside the exit (the terminal: its fuel note)',
+     /const nmTail = n\.stop\.tier === 'term' \? TERMINAL_FUEL_NOTE : n\.stop\.row\[20\];/.test(nmBody)
+     && /<span class="nm-code">&middot; \$\{Esc\.escapeHtml\(nmTail\)\}<\/span>/.test(nmBody),
      nmBody.slice(nmBody.indexOf('nm-dist'), nmBody.indexOf('nm-dist') + 500));
   ok('  conditionally, like the list row and the sheet',
-     /n\.stop\.row\[20\]\s*\?/.test(nmBody));
+     /\(nmTail\s*\?/.test(nmBody));
   ok('  escaped on the way in, like every other value in that row',
-     /Esc\.escapeHtml\(n\.stop\.row\[20\]\)/.test(nmBody));
+     /Esc\.escapeHtml\(nmTail\)/.test(nmBody));
   // The layout decision that makes it reliable: the code never shrinks, so on
   // a narrow screen the EXIT ellipsises instead of the code vanishing.
   ok('>>> the code slot never shrinks (flex:0 0 auto)',

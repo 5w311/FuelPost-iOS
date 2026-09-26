@@ -85,11 +85,21 @@ console.log('\n=== ordering is strictly by distance ===');
 
 console.log('\n=== closed stops and terminals never appear ===');
 {
-  // TN6 is the Covenant HQ terminal. Stand next to it and confirm it is never
-  // the answer.
+  // TN6 is the Covenant HQ terminal. Its pump fills diesel, not DEF, so since
+  // v2.3.9 the footer ranks it (NEAR_ME_STOPS) while the planner's
+  // FUEL_STOPS still never holds it.
   const atTerminal = near(35.0083, -85.3906, 4);
-  ok('>>> the HQ terminal is not offered as fuel',
+  ok('>>> the HQ terminal is never in FUEL_STOPS, the planner\'s list',
      !atTerminal.some(x => x.stop.id === 'TN6'), JSON.stringify(atTerminal.map(x => x.stop.id)));
+  const NEAR_ME_STOPS = FUEL_STOPS.concat(DATA.filter(r => r[11] === 'term' && !CLOSED.has(r[0]))
+    .map(r => ({ id: r[0], name: r[2], lat: r[9], lng: r[10], tier: r[11], row: r })));
+  const footerAtTerminal = N.nearestStops(35.0083, -85.3906, NEAR_ME_STOPS, haversine, 4);
+  ok('>>> standing at the terminal, the footer offers the terminal first',
+     footerAtTerminal[0].stop.id === 'TN6' && footerAtTerminal[0].stop.tier === 'term',
+     JSON.stringify(footerAtTerminal.map(x => x.stop.id)));
+  ok('  and the terminal is the only non-fuel-stop it adds',
+     NEAR_ME_STOPS.length === FUEL_STOPS.length + 1
+     && /const NEAR_ME_STOPS = FUEL_STOPS\.concat\(\s*DATA\.filter\(r => r\[11\] === 'term' && !CLOSED_STOP_IDS\.has\(r\[0\]\)\)/.test(html));
   // No stop is closed today: TA Gary (IN1), the last, reopened in v2.3.8.
   // Standing on it, it is the answer again. The exclusion itself is shown on
   // a copy of the network with TA Gary taken back out, so the rule stays
