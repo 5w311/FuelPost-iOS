@@ -1765,5 +1765,19 @@ ok('>>> off by default, and a saved profile turns it on only when strictly true'
 ok('  the Custom summary names the hazmat too',
    /\+ \(vehicle\.customHazmat \? ' · ' \+ hazmatSummary\(\) : ''\);/.test(codeOnly));
 
+console.log('\n=== the tank gauge, refined (v2.3.12) ===');
+ok('>>> the reading sits beside the question, in one head row',
+   /<div class="gauge-head">\s*<label id="gaugeLabel">How far can you run now\?<\/label>\s*<div class="gauge-readout" id="gaugeReadout"><\/div>\s*<\/div>/.test(html));
+ok('  showing the short form, with the full sentence kept for the slider\'s aria-valuetext',
+   /\$\('gaugeReadout'\)\.textContent = gaugeReadoutShort\(gaugeTick\);/.test(codeOnly)
+   && /\$\('fuelGauge'\)\.setAttribute\('aria-valuetext', text\);/.test(codeOnly));
+ok('>>> the low-tank note shows only at or under the floor',
+   /id="gaugeDangerNote" hidden>/.test(html)
+   && /\$\('gaugeDangerNote'\)\.hidden = gaugeTick > FuelGauge\.RESERVE_TICKS;/.test(codeOnly));
+ok('  and says when the plan is on backup reserve, since the short reading does not',
+   /\$\('gaugeBackup'\)\.hidden = !r\.backup;/.test(codeOnly));
+ok('>>> the needle is the accent blue, not red',
+   /\.gauge-needle\{background:var\(--accent-fill\);/.test(html) && !/\.gauge-needle\{background:#FF3B30/.test(html));
+
 console.log(`\n${p} passed, ${f} failed`);
 if (f) process.exitCode = 1;

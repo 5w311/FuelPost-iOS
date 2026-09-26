@@ -688,10 +688,15 @@
   .gauge-warn{position:absolute;top:-3px;bottom:-3px;left:var(--gauge-band-danger);width:var(--gauge-band-warn);background:#F5DFA5;pointer-events:none;}
   .gauge-tick{position:absolute;top:5px;bottom:5px;width:2px;background:var(--gauge-tick);transform:translateX(-50%);pointer-events:none;}
   .gauge-tick.minor{top:11px;bottom:11px;width:1px;background:var(--gauge-tick-minor);}
-  .gauge-needle{position:absolute;top:-4px;bottom:-4px;width:9px;border-radius:5px;background:#C4281C;box-shadow:0 1px 4px rgba(0,0,0,.35);transform:translateX(-50%);pointer-events:none;}
+  .gauge-needle{position:absolute;top:-4px;bottom:-4px;width:9px;border-radius:5px;background:var(--navy);box-shadow:0 1px 4px rgba(0,0,0,.35);transform:translateX(-50%);pointer-events:none;}
   .gauge-danger-note{font-size:10.5px;color:var(--danger-text);line-height:1.4;margin-top:8px;}
   .gauge-danger-note a{color:var(--danger-text);font-weight:700;}
-  .gauge-readout{font-size:13px;font-weight:700;color:var(--ink);margin-top:8px;}
+  .gauge-backup{display:block;margin-bottom:2px;}
+  .gauge-backup[hidden]{display:none;}
+  .gauge-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;column-gap:10px;}
+  .gauge-head label{margin-bottom:0;}
+  .gauge-readout{font-size:13px;font-weight:700;color:var(--ink);margin-left:auto;white-space:nowrap;}
+  .gauge-hint{margin-top:6px;}
 
   #planBtn{width:100%;background:var(--navy);color:#fff;border:none;border-radius:10px;padding:0 14px;height:40px;font-size:13.5px;font-weight:700;margin-top:6px;flex-shrink:0;}
   #planBtn[disabled]{opacity:.55;}
@@ -1492,8 +1497,11 @@ body:not(.route-mode) #mapwrap .H_l_bottom.H_l_right .H_ctl:not(.H_zoom):not(.H_
 .gauge-track{height:44px;border:0;border-radius:12px;background:var(--fill);}
 .gauge-danger{top:0;bottom:0;left:0;width:var(--gauge-band-danger);background:rgba(255,59,48,.32);border-radius:12px 0 0 12px;}
 .gauge-warn{top:0;bottom:0;background:rgba(255,159,10,.3);}
-.gauge-needle{background:#FF3B30;width:8px;top:-5px;bottom:-5px;}
-.gauge-readout{font-size:20px;line-height:26px;margin-top:10px;}
+/* Blue, not red (v2.3.12): a red needle at F read as danger. Red is the
+   low-zone band's colour and nothing else's. */
+.gauge-needle{background:var(--accent-fill);width:8px;top:-5px;bottom:-5px;}
+.gauge-head{margin-bottom:6px;}
+.gauge-readout{font-size:16px;line-height:22px;font-weight:700;}
 .gauge-danger-note{font-size:13px;}
 
 /* ---- Route results: the same card as the trip details above it — inset to
@@ -1800,7 +1808,13 @@ html[data-theme="dark"]{--navy:#3A5F9E;}
     </div>
         <button type="button" id="pickupRangeToggle" class="rb-disclosure" aria-expanded="false" aria-controls="pickupRangeField">Not leaving with a full tank?</button>
     <div class="rb-field" id="pickupRangeField" hidden>
-      <label id="gaugeLabel">How far can you run right now?</label>
+      <!-- The answer sits beside the question (v2.3.12), so the reading is at
+           the top and the dial under it; it wraps under the question on a
+           phone too narrow for both. -->
+      <div class="gauge-head">
+        <label id="gaugeLabel">How far can you run now?</label>
+        <div class="gauge-readout" id="gaugeReadout"></div>
+      </div>
       <div class="gauge" id="fuelGauge" tabindex="0" role="slider" aria-labelledby="gaugeLabel" aria-valuemin="1" aria-valuemax="8">
         <div class="gauge-labels" id="gaugeLabels"></div>
         <div class="gauge-track" id="gaugeTrack">
@@ -1810,9 +1824,11 @@ html[data-theme="dark"]{--navy:#3A5F9E;}
           <div class="gauge-needle" id="gaugeNeedle"></div>
         </div>
       </div>
-      <div class="gauge-danger-note" id="gaugeDangerNote"></div>
-      <div class="gauge-readout" id="gaugeReadout"></div>
-      <div class="rb-help">Tap or drag to where your gauge sits.</div>
+      <div class="rb-help gauge-hint">Tap or drag to where your gauge sits.</div>
+      <!-- Only while the needle is in the red/amber stretch (v2.3.12) — at a
+           healthy reading it was a red paragraph about a problem the driver
+           doesn't have. See renderGauge. -->
+      <div class="gauge-danger-note" id="gaugeDangerNote" hidden><b class="gauge-backup" id="gaugeBackup" hidden></b><span id="gaugeDangerText"></span></div>
     </div>
     <!-- Vehicle profile. Feeds real dimensions/weight/hazmat into the routing
          call — before this existed the app sent transportMode=truck and no
@@ -2098,35 +2114,35 @@ html[data-theme="dark"]{--navy:#3A5F9E;}
      commit). test/cachebust.test.js fails the suite if any stamp drifts from
      APP_VERSION, so bump them together. -->
 <script>var module = { exports: {} };</script>
-<script src="lib/fuelplan.js?v=2.3.11"></script>
+<script src="lib/fuelplan.js?v=2.3.12"></script>
 <script>var FuelPlan = module.exports; module = { exports: {} };</script>
-<script src="lib/triptext.js?v=2.3.11"></script>
+<script src="lib/triptext.js?v=2.3.12"></script>
 <script>var TripText = module.exports; module = { exports: {} };</script>
-<script src="lib/location.js?v=2.3.11"></script>
+<script src="lib/location.js?v=2.3.12"></script>
 <script>var GeoLib = module.exports; module = { exports: {} };</script>
-<script src="lib/gauge.js?v=2.3.11"></script>
+<script src="lib/gauge.js?v=2.3.12"></script>
 <script>var FuelGauge = module.exports; module = { exports: {} };</script>
-<script src="lib/corridors.js?v=2.3.11"></script>
+<script src="lib/corridors.js?v=2.3.12"></script>
 <script>var Corridors = module.exports; module = { exports: {} };</script>
-<script src="lib/nearme.js?v=2.3.11"></script>
+<script src="lib/nearme.js?v=2.3.12"></script>
 <script>var NearMe = module.exports; module = { exports: {} };</script>
-<script src="lib/extract-version.js?v=2.3.11"></script>
+<script src="lib/extract-version.js?v=2.3.12"></script>
 <script>var ExtractVersion = module.exports; module = { exports: {} };</script>
-<script src="lib/autosuggest.js?v=2.3.11"></script>
+<script src="lib/autosuggest.js?v=2.3.12"></script>
 <script>var AutoSuggest = module.exports; module = { exports: {} };</script>
-<script src="lib/baselayer.js?v=2.3.11"></script>
+<script src="lib/baselayer.js?v=2.3.12"></script>
 <script>var BaseLayer = module.exports; module = { exports: {} };</script>
-<script src="lib/memocache.js?v=2.3.11"></script>
+<script src="lib/memocache.js?v=2.3.12"></script>
 <script>var MemoCache = module.exports; module = { exports: {} };</script>
-<script src="lib/routerank.js?v=2.3.11"></script>
+<script src="lib/routerank.js?v=2.3.12"></script>
 <script>var RouteRank = module.exports; module = { exports: {} };</script>
-<script src="lib/vehicleprofile.js?v=2.3.11"></script>
+<script src="lib/vehicleprofile.js?v=2.3.12"></script>
 <script>var VehicleProfile = module.exports; module = { exports: {} };</script>
-<script src="lib/escape.js?v=2.3.11"></script>
+<script src="lib/escape.js?v=2.3.12"></script>
 <script>var Esc = module.exports; module = { exports: {} };</script>
-<script src="lib/stopfilter.js?v=2.3.11"></script>
+<script src="lib/stopfilter.js?v=2.3.12"></script>
 <script>var StopFilter = module.exports; module = { exports: {} };</script>
-<script src="lib/navlinks.js?v=2.3.11"></script>
+<script src="lib/navlinks.js?v=2.3.12"></script>
 <script>var NavLinks = module.exports; module = { exports: {} };</script>
 
 <!-- fuelplan-adaptive.js ships unmodified and does `require('./fuelplan.js')`
@@ -2142,7 +2158,7 @@ html[data-theme="dark"]{--navy:#3A5F9E;}
      mode never loads this file. -->
 <script>
 var FuelPlanAdaptive;
-fetch('lib/fuelplan-adaptive.js?v=2.3.11')
+fetch('lib/fuelplan-adaptive.js?v=2.3.12')
   .then(r => r.text())
   .then(src => {
     const m = { exports: {} };
@@ -2159,7 +2175,7 @@ fetch('lib/fuelplan-adaptive.js?v=2.3.11')
 // same reason as the long comment above. planLoad() guards on both being
 // loaded before planning.
 var ShortTrip;
-fetch('lib/shorttrip.js?v=2.3.11')
+fetch('lib/shorttrip.js?v=2.3.12')
   .then(r => r.text())
   .then(src => {
     const m = { exports: {} };
@@ -2170,7 +2186,7 @@ fetch('lib/shorttrip.js?v=2.3.11')
   .catch(err => console.error('Failed to load lib/shorttrip.js:', err));
 </script>
 
-<script src="lib/flexible-polyline.js?v=2.3.11"></script>
+<script src="lib/flexible-polyline.js?v=2.3.12"></script>
 <script>var FlexPolyline = module.exports; module = undefined;</script>
 
 <script>
@@ -2511,7 +2527,7 @@ const STATE_NAMES = {
 // CLOSED_STOP_IDS, and keeps its pin and its sheet so a driver who goes looking
 // learns what happened to it. Deleting a closed row throws that away. See the
 // closure block further down for the live example of the second kind.
-const APP_VERSION = '2.3.11';
+const APP_VERSION = '2.3.12';
 const FUEL_BOOK_REV = 'Rev 01-2026';
 
 // Every code that appears in DATA's amenity column must have an entry here.
@@ -6709,7 +6725,7 @@ function buildGaugeMarkup(){
   // all — what's left is physical fuel to limp on, and the driver is entitled
   // to the actual figure rather than a vague "very low".
   const floorLabel = FuelGauge.tickLabel(FuelGauge.RESERVE_TICKS);
-  $('gaugeDangerNote').innerHTML = `E isn't selectable. Under ${floorLabel} of a tank, plannable range is 0 — you likely have about ${FuelGauge.milesForTick(FuelGauge.RESERVE_TICKS)} miles to limp towards an out-of-network fuel stop.
+  $('gaugeDangerText').innerHTML = `E isn't selectable. Under ${floorLabel} of a tank, plannable range is 0 — you likely have about ${FuelGauge.milesForTick(FuelGauge.RESERVE_TICKS)} miles to limp towards an out-of-network fuel stop.
     <br>Call the Fuel Dept if you're this low: <a href="tel:${DRIVER_SUPPORT.replace(/[^0-9]/g,'')}">${DRIVER_SUPPORT}</a>`;
 }
 buildGaugeMarkup();
@@ -6723,11 +6739,26 @@ function gaugeReadoutText(tick){
        + (r.backup ? ' on backup reserve' : '');
 }
 
+// The short form that fits BESIDE the question (v2.3.12): "F — 900 mi". On
+// backup reserve the "reserve" moves to its own line in the low-tank note,
+// which is showing whenever that is true, so the reading never wraps and
+// jumps the dial. The full sentence stays the slider's aria-valuetext.
+function gaugeReadoutShort(tick){
+  const r = FuelGauge.rangeForTick(tick);
+  return `${FuelGauge.tickLabel(tick)} — ${r.miles.toLocaleString()} mi`;
+}
+
 function renderGauge(){
   const pct = gaugeTick / GAUGE_MAX_TICK * 100;
   $('gaugeNeedle').style.left = pct + '%';
   const text = gaugeReadoutText(gaugeTick);
-  $('gaugeReadout').textContent = text;
+  $('gaugeReadout').textContent = gaugeReadoutShort(gaugeTick);
+  // The low-tank note shows only at or under the floor — the ticks that plan
+  // nothing (v2.3.12). Above it the driver has no problem to be told about.
+  $('gaugeDangerNote').hidden = gaugeTick > FuelGauge.RESERVE_TICKS;
+  const r = FuelGauge.rangeForTick(gaugeTick);
+  $('gaugeBackup').hidden = !r.backup;
+  $('gaugeBackup').textContent = r.backup ? `Planning on ${r.miles.toLocaleString()} mi of backup reserve.` : '';
   $('fuelGauge').setAttribute('aria-valuenow', String(gaugeTick));
   $('fuelGauge').setAttribute('aria-valuetext', text);
 }
