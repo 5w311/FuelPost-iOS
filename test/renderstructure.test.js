@@ -1208,8 +1208,8 @@ ok('  with 44px touch targets, for gloved hands on the move',
 
 // The ranking must never see a filter. This is the invariant the brief calls
 // out as most likely to be broken later.
-ok('>>> the ranking is fed FUEL_STOPS, never the filtered set',
-   /NearMe\.nearestStops\(anchor\.lat, anchor\.lng, FUEL_STOPS,/.test(codeOnly));
+ok('>>> the ranking is fed NEAR_ME_STOPS (fuel stops + the terminal, v2.3.9), never the filtered set',
+   /NearMe\.nearestStops\(anchor\.lat, anchor\.lng, NEAR_ME_STOPS,/.test(codeOnly));
 ok('  and never currentFiltered or passes()',
    !/nearestStops\([^)]*currentFiltered/.test(codeOnly) && !/nearestStops\([^)]*passes/.test(codeOnly));
 ok('  the real haversine is what measures every mile',
@@ -1724,10 +1724,32 @@ console.log('\n=== the stop card lists its restaurants (v2.3.8) ===');
      && at('Full service') < at('Quick service') && at('Quick service') < at('Truck service bays'));
   ok('>>> the Sit-down restaurant chip drops off the card only when Full service names it',
      /const sheetAmen = food && food\[0\] \? amen\.split\(','\)\.filter\(c => c && c !== 'R'\)\.join\(','\) : amen;/.test(sheet)
-     && /if\(sheetAmen\)\{\s*html \+= `<div class="amenities"><h4>Amenities<\/h4><div class="chip-wrap">\$\{amenChips\(sheetAmen,AMEN_LABEL\)\}/.test(sheet));
+     && /if\(sheetAmen \|\| yardAmen\)\{\s*html \+= `<div class="amenities"><h4>Amenities<\/h4><div class="chip-wrap">\$\{amenChips\(sheetAmen,AMEN_LABEL\)\}/.test(sheet));
   ok('  R still labelled, so the amenity filter keeps it',
      /R:"Sit-down restaurant"/.test(html));
 }
+
+console.log('\n=== the terminal in Near Me, never in a plan (v2.3.9) ===');
+{
+  ok('>>> NEAR_ME_STOPS adds the terminal to FUEL_STOPS; FUEL_STOPS still drops it',
+     /const FUEL_STOPS = DATA\.filter\(r => r\[11\] !== 'term' && !CLOSED_STOP_IDS\.has\(r\[0\]\)\)/.test(codeOnly)
+     && /const NEAR_ME_STOPS = FUEL_STOPS\.concat\(/.test(codeOnly));
+  ok('  only the Near Me footer reads it',
+     (codeOnly.replace(/\/\*[\s\S]*?\*\//g, '').match(/NEAR_ME_STOPS/g) || []).length === 2);
+  ok('>>> the footer line says diesel only when the terminal is nearest',
+     /const TERMINAL_FUEL_NOTE = 'Diesel only, no DEF';/.test(codeOnly)
+     && /const firstNote = first\.stop\.tier === 'term' \? ` \(\$\{TERMINAL_FUEL_NOTE\}\)` : '';/.test(codeOnly));
+  ok('  and the terminal\'s card has a Fuel row saying it is not used in plans',
+     /if\(type === 'term'\) html \+= `<div class="row"><div class="k">Fuel<\/div><div class="v">\$\{TERMINAL_FUEL_NOTE\} &middot; not used in plans<\/div><\/div>`;/.test(codeOnly));
+}
+
+console.log('\n=== the terminal\'s own amenities on its card (v2.3.9) ===');
+ok('>>> TN6 lists laundry, driver lounge, dining, barbershop and the company store',
+   /const TERMINAL_AMENITIES = \{\s*TN6: \['Laundry', 'Driver lounge', 'Dining facility', 'Barbershop', 'Company store'\]\s*\};/.test(codeOnly));
+ok('  shown after DATA\'s chips, escaped, and only where a stop has some',
+   /const yardAmen = \(TERMINAL_AMENITIES\[id\] \|\| \[\]\)\.map\(a => `<span class="chip">\$\{Esc\.escapeHtml\(a\)\}<\/span>`\)\.join\(''\);/.test(codeOnly)
+   && /if\(sheetAmen \|\| yardAmen\)\{/.test(codeOnly)
+   && /\$\{amenChips\(sheetAmen,AMEN_LABEL\)\}\$\{yardAmen\}/.test(codeOnly));
 
 console.log(`\n${p} passed, ${f} failed`);
 if (f) process.exitCode = 1;

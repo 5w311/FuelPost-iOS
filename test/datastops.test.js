@@ -391,9 +391,16 @@ console.log('\n=== terminals are never planned as fuel ===');
     .split('\n').map(l => l.replace(/^\s*\/\/.*$/, '')).join('\n');
   const callSites = htmlSansComments.match(/(planAdaptive|stopsNearPickup|planBeyondGap|nearestStops)\([^;]*?\)/gs) || [];
   ok('  found the call sites in index.html', callSites.length >= 4, String(callSites.length));
-  ok('>>> every stop-selecting call site in index.html is handed FUEL_STOPS',
-     callSites.every(c => /FUEL_STOPS/.test(c)),
+  // One exception since v2.3.9: the Near Me footer ranks NEAR_ME_STOPS,
+  // which is FUEL_STOPS plus the terminal's diesel-only pump. It offers, it
+  // never plans.
+  const nearMeSite = c => /NEAR_ME_STOPS, FuelPlan\.haversine, NEAR_ME_COUNT/.test(c.replace(/\s+/g, ' '));
+  ok('>>> every stop-selecting call site in index.html is handed FUEL_STOPS (Near Me excepted)',
+     callSites.every(c => /FUEL_STOPS/.test(c) || nearMeSite(c))
+     && callSites.filter(nearMeSite).length === 1,
      JSON.stringify(callSites.filter(c => !/FUEL_STOPS/.test(c))));
+  ok('  NEAR_ME_STOPS is FUEL_STOPS plus the open terminals, nothing else',
+     /const NEAR_ME_STOPS = FUEL_STOPS\.concat\(\s*DATA\.filter\(r => r\[11\] === 'term' && !CLOSED_STOP_IDS\.has\(r\[0\]\)\)/.test(html));
   ok('  and FUEL_STOPS is the only thing that drops terminals',
      /DATA\.filter\(r => r\[11\] !== 'term'/.test(html)
      && !FUEL_STOPS.some(s => s.tier === 'term'));
