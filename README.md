@@ -661,7 +661,8 @@ this list does not.
 ### v2.3.12
 The tank gauge reads cleaner: the answer ("F — 900 mi") sits beside "How far can
 you run now?", the needle is blue, and the red low-tank warning with the Fuel
-Dept number only shows when the needle is at 1/4 or below.
+Dept number only shows when the needle is at 1/4 or below. The marks at E and F
+no longer poke out of the ends of the gauge.
 
 ### v2.3.11
 Custom in Vehicle Routing has a "Carrying hazmat?" switch. Turn it on and pick

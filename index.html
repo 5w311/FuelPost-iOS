@@ -1497,6 +1497,9 @@ body:not(.route-mode) #mapwrap .H_l_bottom.H_l_right .H_ctl:not(.H_zoom):not(.H_
 .gauge-track{height:44px;border:0;border-radius:12px;background:var(--fill);}
 .gauge-danger{top:0;bottom:0;left:0;width:var(--gauge-band-danger);background:rgba(255,59,48,.32);border-radius:12px 0 0 12px;}
 .gauge-warn{top:0;bottom:0;background:rgba(255,159,10,.3);}
+/* No tick on E or F (v2.3.12): they sat on the track's very ends and poked
+   out past its rounded corners. The ends of the track mark E and F. */
+.gauge-ticks > .gauge-tick:first-child,.gauge-ticks > .gauge-tick:last-child{display:none;}
 /* Blue, not red (v2.3.12): a red needle at F read as danger. Red is the
    low-zone band's colour and nothing else's. */
 .gauge-needle{background:var(--accent-fill);width:8px;top:-5px;bottom:-5px;}
