@@ -1785,5 +1785,11 @@ ok('>>> no tick on E or F, where they poked out of the rounded track',
 ok('>>> the needle is the accent blue, not red',
    /\.gauge-needle\{background:var\(--accent-fill\);/.test(html) && !/\.gauge-needle\{background:#FF3B30/.test(html));
 
+console.log('\n=== one Route card open at a time (v2.3.13) ===');
+ok('>>> expanding the results by tap minimises the trip details',
+   /const expanding = rrCollapsed;\s*setRrCollapsed\(!rrCollapsed\);\s*if\(expanding && routebarOpen\) setRoutebarOpen\(false\);/.test(codeOnly));
+ok('>>> opening the trip details by tap minimises a reopenable results card',
+   /const opening = !routebarOpen;\s*setRoutebarOpen\(opening\);[\s\S]{0,80}if\(opening && !rrCollapsed && rr\.classList\.contains\('show'\) && !\$\('rrTab'\)\.hidden\) setRrCollapsed\(true\);/.test(codeOnly));
+
 console.log(`\n${p} passed, ${f} failed`);
 if (f) process.exitCode = 1;
